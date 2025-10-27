@@ -1,12 +1,10 @@
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
-
-const veiculos = [
-  { id: "1", nome: "Carro 1", modelo: "Modelo A", placa: "ABC-1234" },
-  { id: "2", nome: "Carro 2", modelo: "Modelo B", placa: "DEF-5678" },
-  { id: "3", nome: "Moto 1", modelo: "Modelo C", placa: "GHI-9012" },
-];
+import { useContext } from "react";
+import { UserContext } from "../UserContext";
 
 export function HomeScreen({ navigation }: any) {
+  const { user } = useContext(UserContext);
+
   return (
     <View style={{ flex: 1, padding: 16, backgroundColor: "#f2f2f2" }}>
       <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 16 }}>
@@ -15,8 +13,8 @@ export function HomeScreen({ navigation }: any) {
 
       {/* LISTA DE CAIXAS */}
       <FlatList
-        data={veiculos}
-        keyExtractor={(item) => item.id}
+        data={user?.veiculos || []}
+        keyExtractor={(item) => item.placa}
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => navigation.navigate("VehicleDetails", { veiculo: item })}
@@ -31,9 +29,11 @@ export function HomeScreen({ navigation }: any) {
               elevation: 2,
             }}
           >
-            <Text style={{ fontSize: 16, fontWeight: "bold" }}>{item.nome}</Text>
-            <Text>{item.modelo}</Text>
-            <Text>{item.placa}</Text>
+            <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+              {item.marca} {item.modelo}
+            </Text>
+            <Text>Categoria: {item.categoria}</Text>
+            <Text>Placa: {item.placa}</Text>
           </TouchableOpacity>
         )}
       />

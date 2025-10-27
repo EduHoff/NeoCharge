@@ -4,7 +4,7 @@ import { Image } from "react-native";
 
 import { UserProvider } from "./UserContext";
 import { PerfilScreen } from "./screens/PerfilScreen";
-import { HomeStack } from "./HomeStack"; // <-- adiciona isso
+import { HomeStack } from "./HomeStack";
 import { styles } from "./styles";
 
 const Tab = createBottomTabNavigator();
@@ -16,9 +16,9 @@ export default function App() {
         <Tab.Navigator>
           <Tab.Screen
             name="Home"
-            component={HomeStack} // <-- agora o Home usa o Stack
+            component={HomeStack}
             options={{
-              headerShown: false, // oculta o cabeçalho duplicado
+              headerShown: false,
               tabBarIcon: () => (
                 <Image source={require("./assets/home.png")} style={styles.icon_tab_styles} />
               ),

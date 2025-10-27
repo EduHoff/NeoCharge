@@ -1,14 +1,25 @@
-import { View, Text } from "react-native";
+import { View, Text, Button } from "react-native";
 
-export function VehicleDetailsScreen({ route }: any) {
-  const { veiculo } = route.params;
+export function VehicleDetailsScreen({ route, navigation }: any) {
+  const { veiculo } = route.params; // ← recebendo veículo enviado pela Home
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text style={{ fontSize: 20, fontWeight: "bold" }}>Detalhes do Veículo</Text>
-      <Text style={{ marginTop: 10 }}>Nome: {veiculo.nome}</Text>
-      <Text>Modelo: {veiculo.modelo}</Text>
+    <View style={{ flex: 1, padding: 20, backgroundColor: "#f2f2f2" }}>
+      <Text style={{ fontSize: 22, fontWeight: "bold", marginBottom: 16 }}>
+        {veiculo.marca} {veiculo.modelo}
+      </Text>
+
       <Text>Placa: {veiculo.placa}</Text>
+      <Text>Cor: {veiculo.cor}</Text>
+      <Text>Categoria: {veiculo.categoria}</Text>
+      <Text>
+        Carga Atual: {veiculo.cargaAtual} / {veiculo.capacidadeTotal} kWh
+      </Text>
+      <Text style={{ marginVertical: 10 }}>
+        Bateria: {veiculo.porcentagemCarga.toFixed(1)}%
+      </Text>
+
+      <Button title="Voltar" onPress={() => navigation.goBack()} />
     </View>
   );
 }
