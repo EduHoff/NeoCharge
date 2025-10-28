@@ -1,13 +1,15 @@
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import { useContext } from "react";
 import { UserContext } from "../UserContext";
+import { stylesHomeScreen } from "../styles/styles";
+
 
 export function HomeScreen({ navigation }: any) {
   const { user } = useContext(UserContext);
 
   return (
-    <View style={{ flex: 1, padding: 16, backgroundColor: "#f2f2f2" }}>
-      <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 16 }}>
+    <View style={stylesHomeScreen.container}>
+      <Text style={stylesHomeScreen.title}>
         Veículos cadastrados
       </Text>
 
@@ -18,18 +20,9 @@ export function HomeScreen({ navigation }: any) {
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => navigation.navigate("VehicleDetails", { veiculo: item })}
-            style={{
-              backgroundColor: "#fff",
-              padding: 16,
-              borderRadius: 12,
-              marginBottom: 12,
-              shadowColor: "#000",
-              shadowOpacity: 0.1,
-              shadowRadius: 4,
-              elevation: 2,
-            }}
+            style={stylesHomeScreen.bntVehicleDetails}
           >
-            <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+            <Text style={stylesHomeScreen.txtVehicleDetails}>
               {item.marca} {item.modelo}
             </Text>
             <Text>Categoria: {item.categoria}</Text>
@@ -38,19 +31,6 @@ export function HomeScreen({ navigation }: any) {
         )}
       />
 
-      {/* BOTÃO PARA PERFIL */}
-      <TouchableOpacity
-        style={{
-          marginTop: 20,
-          backgroundColor: "#007bff",
-          padding: 12,
-          borderRadius: 8,
-          alignSelf: "center",
-        }}
-        onPress={() => navigation.navigate("Perfil")}
-      >
-        <Text style={{ color: "#fff", fontWeight: "bold" }}>Ir para Perfil</Text>
-      </TouchableOpacity>
     </View>
   );
 }

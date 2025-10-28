@@ -1,30 +1,29 @@
-import { View, Text, Button, Image } from "react-native";
+import { View, Text, Image } from "react-native";
 
 import { useContext } from "react";
 import { UserContext } from "../UserContext";
+import { stylesPerfilScreen } from "../styles/styles";
 
-export function PerfilScreen({ navigation }: any) {
+export function PerfilScreen() {
   const { user } = useContext(UserContext);
 
   if (!user) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <View style={stylesPerfilScreen.container}>
         <Text>Carregando usuário...</Text>
       </View>
     );
   }
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <View style={stylesPerfilScreen.container}>
       <Text>Página de Perfil do Usuário</Text>
-
-     
-      <Image source={user.fotoPerfil} style={{ width: 100, height: 100, borderRadius: 50 }} />
-
+ 
+      <Image source={user.fotoPerfil} style={stylesPerfilScreen.fotoPerfil} />
       <Text>Nome: {user.nome}</Text>
+      <Text>CPF: {user.cpf}</Text>
       <Text>Email: {user.email}</Text>
 
-      <Button title="Voltar" onPress={() => navigation.goBack()} />
     </View>
   );
 }

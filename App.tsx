@@ -5,7 +5,7 @@ import { Image } from "react-native";
 import { UserProvider } from "./UserContext";
 import { PerfilScreen } from "./screens/PerfilScreen";
 import { HomeStack } from "./HomeStack";
-import { styles } from "./styles";
+import { stylesApp } from "./styles/styles";
 
 const Tab = createBottomTabNavigator();
 
@@ -20,7 +20,7 @@ export default function App() {
             options={{
               headerShown: false,
               tabBarIcon: () => (
-                <Image source={require("./assets/home.png")} style={styles.icon_tab_styles} />
+                <Image source={require("./assets/home.png")} style={stylesApp.tabIcon} />
               ),
             }}
           />
@@ -30,7 +30,7 @@ export default function App() {
             component={PerfilScreen}
             options={{
               tabBarIcon: () => (
-                <Image source={require("./assets/user.png")} style={styles.icon_tab_styles} />
+                <Image source={require("./assets/user.png")} style={stylesApp.tabIcon} />
               ),
             }}
           />
