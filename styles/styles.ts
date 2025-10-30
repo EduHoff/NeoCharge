@@ -107,6 +107,63 @@ export const stylesPerfilScreen = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+    modalContainer: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.6)",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+  modalBox: {
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 20,
+    width: "90%",
+    maxHeight: "80%",
+    elevation: 6,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+    color: cor4,
+    marginBottom: 16,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 12,
+    padding: 10,
+    marginBottom: 10,
+  },
+  categoriaBox: {
+  flexDirection: "row",
+  flexWrap: "wrap",
+  justifyContent: "center",
+  marginVertical: 10,
+},
+
+categoriaBotao: {
+  paddingVertical: 8,
+  paddingHorizontal: 12,
+  borderRadius: 20,
+  borderWidth: 1,
+  borderColor: "#3498db",
+  margin: 4,
+},
+
+categoriaSelecionada: {
+  backgroundColor: "#3498db",
+},
+
+categoriaTexto: {
+  color: "#3498db",
+  fontWeight: "500",
+},
+
+categoriaTextoSelecionado: {
+  color: "#fff",
+},
 });
 
 // ---------- VEHICLE DETAILS SCREEN ----------

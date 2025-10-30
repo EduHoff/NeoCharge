@@ -23,8 +23,9 @@ export function UserProvider({ children }: ProviderProps) {
   useEffect(() => {
     const templateUser = new Usuario(
       "Fulano Beltrano de Sicrano",
-      "fulanobeltranodesicrano@email.com",
       "111.111.111-11",
+      "fulanobeltranodesicrano@email.com",
+      "(11)11111-1111",  
       require("./assets/default_profile.png")
       
     );
