@@ -1,15 +1,5 @@
 import React, { useContext, useState } from "react";
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  Modal,
-  ScrollView,
-  Alert,
-  BackHandler,
-} from "react-native";
+import { View, Text, Image, TouchableOpacity, TextInput, Modal, ScrollView, Alert, BackHandler } from "react-native";
 import { UserContext } from "../UserContext";
 import { Veiculo } from "../entities/Veiculo";
 import { CategoriaVeiculo } from "../entities/CategoriasVeiculo";
@@ -133,7 +123,28 @@ export function PerfilScreen() {
                   />
                 ))}
 
-                {/* 🔽 Seletor de categoria */}
+                {/* Campos de carga com rótulo e unidade */}
+                <TextInput
+                  placeholder="Capacidade total (kWh)"
+                  style={stylesPerfilScreen.input}
+                  keyboardType="numeric"
+                  value={novoVeiculo.capacidadeTotal.toString()}
+                  onChangeText={(txt) =>
+                    setNovoVeiculo((prev) => ({ ...prev, capacidadeTotal: txt }))
+                  }
+                />
+
+                <TextInput
+                  placeholder="Carga atual (kWh)"
+                  style={stylesPerfilScreen.input}
+                  keyboardType="numeric"
+                  value={novoVeiculo.cargaAtual.toString()}
+                  onChangeText={(txt) =>
+                    setNovoVeiculo((prev) => ({ ...prev, cargaAtual: txt }))
+                  }
+                />
+
+                {/* Seletor de categoria */}
                 <Text style={stylesPerfilScreen.label}>Categoria</Text>
                 <View style={stylesPerfilScreen.categoriaBox}>
                   {Object.values(CategoriaVeiculo).map((categoria) => (
@@ -158,27 +169,6 @@ export function PerfilScreen() {
                     </TouchableOpacity>
                   ))}
                 </View>
-
-                {/* 🔽 Campos de carga com rótulo e unidade */}
-                <TextInput
-                  placeholder="Capacidade total (kWh)"
-                  style={stylesPerfilScreen.input}
-                  keyboardType="numeric"
-                  value={novoVeiculo.capacidadeTotal.toString()}
-                  onChangeText={(txt) =>
-                    setNovoVeiculo((prev) => ({ ...prev, capacidadeTotal: txt }))
-                  }
-                />
-
-                <TextInput
-                  placeholder="Carga atual (kWh)"
-                  style={stylesPerfilScreen.input}
-                  keyboardType="numeric"
-                  value={novoVeiculo.cargaAtual.toString()}
-                  onChangeText={(txt) =>
-                    setNovoVeiculo((prev) => ({ ...prev, cargaAtual: txt }))
-                  }
-                />
 
                 <TouchableOpacity
                   style={[stylesPerfilScreen.exitButton, { backgroundColor: "#27ae60" }]}
