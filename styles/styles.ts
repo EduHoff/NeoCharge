@@ -143,7 +143,7 @@ export const stylesPerfilScreen = StyleSheet.create({
   marginVertical: 10,
 },
 
-categoriaBotao: {
+btnCategoria: {
   paddingVertical: 8,
   paddingHorizontal: 12,
   borderRadius: 20,

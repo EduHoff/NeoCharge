@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { View, Text, Image, TouchableOpacity, TextInput, Modal, ScrollView, Alert, BackHandler } from "react-native";
 import { UserContext } from "../UserContext";
+import { Usuario } from "../entities/Usuario";
 import { Veiculo } from "../entities/Veiculo";
 import { CategoriaVeiculo } from "../entities/CategoriasVeiculo";
 import { stylesPerfilScreen } from "../styles/styles";
@@ -20,40 +21,52 @@ export function PerfilScreen() {
     cargaAtual: "",
   });
 
+  const limparCampos = () => {
+    setNovoVeiculo({
+      marca: "",
+      modelo: "",
+      ano: "",
+      placa: "",
+      cor: "",
+      categoria: CategoriaVeiculo.Carro,
+      capacidadeTotal: "",
+      cargaAtual: "",
+    });
+  };
+
   const handleExit = () => {
     BackHandler.exitApp();
   };
 
-  const handleAddVeiculo = () => {
-    if (!user) return;
+  
+const handleAddVeiculo = () => {
+  if (!user) return;
 
-    // validação básica
-    if (
-      !novoVeiculo.marca ||
-      !novoVeiculo.modelo ||
-      !novoVeiculo.placa ||
-      !novoVeiculo.capacidadeTotal
-    ) {
-      Alert.alert("Erro", "Por favor, preencha todos os campos obrigatórios!");
-      return;
-    }
+  if (!novoVeiculo.marca || !novoVeiculo.modelo || !novoVeiculo.placa || !novoVeiculo.capacidadeTotal) {
+    Alert.alert("Erro", "Por favor, preencha todos os campos obrigatórios!");
+    return;
+  }
 
-    const veiculo = new Veiculo(
-      novoVeiculo.marca,
-      novoVeiculo.modelo,
-      parseInt(novoVeiculo.ano) || 2025,
-      novoVeiculo.placa,
-      novoVeiculo.cor,
-      novoVeiculo.categoria,
-      parseFloat(novoVeiculo.capacidadeTotal),
-      parseFloat(novoVeiculo.cargaAtual) || 0
-    );
+  const veiculo = new Veiculo(
+    novoVeiculo.marca,
+    novoVeiculo.modelo,
+    parseInt(novoVeiculo.ano) || 2025,
+    novoVeiculo.placa,
+    novoVeiculo.cor,
+    novoVeiculo.categoria,
+    parseFloat(novoVeiculo.capacidadeTotal),
+    parseFloat(novoVeiculo.cargaAtual) || 0
+  );
 
-    user.adicionarVeiculo(veiculo);
-    setUser(user);
-    setModalVisible(false);
-    Alert.alert("Sucesso", "Veículo adicionado com sucesso!");
-  };
+  // Cria uma nova instância da classe Usuario
+  const novoUser = new Usuario(user.nome, user.cpf, user.email, user.fone, user.fotoPerfil);
+  novoUser.veiculos = [...user.veiculos, veiculo]; // adiciona os veículos existentes + novo
+
+  setUser(novoUser); // agora React percebe a mudança
+  limparCampos();
+  setModalVisible(false);
+  Alert.alert("Sucesso", "Veículo adicionado com sucesso!");
+};
 
   if (!user) {
     return (
@@ -83,13 +96,7 @@ export function PerfilScreen() {
         <Text style={stylesPerfilScreen.info}>{user.fone}</Text>
       </View>
 
-      <TouchableOpacity
-        style={[
-          stylesPerfilScreen.exitButton,
-          { backgroundColor: "#3498db", marginBottom: 16 },
-        ]}
-        onPress={() => setModalVisible(true)}
-      >
+      <TouchableOpacity style={[stylesPerfilScreen.exitButton, { backgroundColor: "#3498db", marginBottom: 16 }]} onPress={() => setModalVisible(true)}>
         <Text style={stylesPerfilScreen.exitText}>+ Registrar Novo Veículo</Text>
       </TouchableOpacity>
 
@@ -97,96 +104,76 @@ export function PerfilScreen() {
         <Text style={stylesPerfilScreen.exitText}>Sair do App</Text>
       </TouchableOpacity>
 
-      {/* Modal de registro */}
       <Modal visible={modalVisible} animationType="slide" transparent>
         <View style={stylesPerfilScreen.modalContainer}>
           <View style={stylesPerfilScreen.modalBox}>
             <Text style={stylesPerfilScreen.modalTitle}>Novo Veículo</Text>
 
-              <ScrollView>
-                {[
-                  { campo: "marca", rotulo: "Marca" },
-                  { campo: "modelo", rotulo: "Modelo" },
-                  { campo: "ano", rotulo: "Ano" },
-                  { campo: "placa", rotulo: "Placa" },
-                  { campo: "cor", rotulo: "Cor" },
-                ].map(({ campo, rotulo }) => (
-                  <TextInput
-                    key={campo}
-                    placeholder={rotulo}
-                    style={stylesPerfilScreen.input}
-                    keyboardType={campo === "ano" ? "numeric" : "default"}
-                    value={novoVeiculo[campo as keyof typeof novoVeiculo].toString()}
-                    onChangeText={(txt) =>
-                      setNovoVeiculo((prev) => ({ ...prev, [campo]: txt }))
-                    }
-                  />
-                ))}
-
-                {/* Campos de carga com rótulo e unidade */}
+            <ScrollView>
+              {[
+                { campo: "marca", rotulo: "Marca" },
+                { campo: "modelo", rotulo: "Modelo" },
+                { campo: "ano", rotulo: "Ano" },
+                { campo: "placa", rotulo: "Placa" },
+                { campo: "cor", rotulo: "Cor" },
+              ].map(({ campo, rotulo }) => (
                 <TextInput
-                  placeholder="Capacidade total (kWh)"
+                  key={campo}
+                  placeholder={rotulo}
                   style={stylesPerfilScreen.input}
-                  keyboardType="numeric"
-                  value={novoVeiculo.capacidadeTotal.toString()}
-                  onChangeText={(txt) =>
-                    setNovoVeiculo((prev) => ({ ...prev, capacidadeTotal: txt }))
-                  }
+                  keyboardType={campo === "ano" ? "numeric" : "default"}
+                  value={novoVeiculo[campo as keyof typeof novoVeiculo].toString()}
+                  onChangeText={(txt) => setNovoVeiculo((prev) => ({ ...prev, [campo]: txt }))}
                 />
+              ))}
 
-                <TextInput
-                  placeholder="Carga atual (kWh)"
-                  style={stylesPerfilScreen.input}
-                  keyboardType="numeric"
-                  value={novoVeiculo.cargaAtual.toString()}
-                  onChangeText={(txt) =>
-                    setNovoVeiculo((prev) => ({ ...prev, cargaAtual: txt }))
-                  }
-                />
+              <TextInput
+                placeholder="Capacidade total (kWh)"
+                style={stylesPerfilScreen.input}
+                keyboardType="numeric"
+                value={novoVeiculo.capacidadeTotal.toString()}
+                onChangeText={(txt) => setNovoVeiculo((prev) => ({ ...prev, capacidadeTotal: txt }))}
+              />
 
-                {/* Seletor de categoria */}
-                <Text style={stylesPerfilScreen.label}>Categoria</Text>
-                <View style={stylesPerfilScreen.categoriaBox}>
-                  {Object.values(CategoriaVeiculo).map((categoria) => (
-                    <TouchableOpacity
-                      key={categoria}
+              <TextInput
+                placeholder="Carga atual (kWh)"
+                style={stylesPerfilScreen.input}
+                keyboardType="numeric"
+                value={novoVeiculo.cargaAtual.toString()}
+                onChangeText={(txt) => setNovoVeiculo((prev) => ({ ...prev, cargaAtual: txt }))}
+              />
+
+              <Text style={stylesPerfilScreen.label}>Categoria</Text>
+              <View style={stylesPerfilScreen.categoriaBox}>
+                {Object.values(CategoriaVeiculo).map((categoria) => (
+                  <TouchableOpacity
+                    key={categoria}
+                    style={[
+                      stylesPerfilScreen.btnCategoria,
+                      novoVeiculo.categoria === categoria && stylesPerfilScreen.categoriaSelecionada,
+                    ]}
+                    onPress={() => setNovoVeiculo((prev) => ({ ...prev, categoria }))}
+                  >
+                    <Text
                       style={[
-                        stylesPerfilScreen.categoriaBotao,
-                        novoVeiculo.categoria === categoria && stylesPerfilScreen.categoriaSelecionada,
+                        stylesPerfilScreen.categoriaTexto,
+                        novoVeiculo.categoria === categoria && stylesPerfilScreen.categoriaTextoSelecionado,
                       ]}
-                      onPress={() =>
-                        setNovoVeiculo((prev) => ({ ...prev, categoria }))
-                      }
                     >
-                      <Text
-                        style={[
-                          stylesPerfilScreen.categoriaTexto,
-                          novoVeiculo.categoria === categoria && stylesPerfilScreen.categoriaTextoSelecionado,
-                        ]}
-                      >
-                        {categoria}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
+                      {categoria}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
 
-                <TouchableOpacity
-                  style={[stylesPerfilScreen.exitButton, { backgroundColor: "#27ae60" }]}
-                  onPress={handleAddVeiculo}
-                >
-                  <Text style={stylesPerfilScreen.exitText}>Salvar Veículo</Text>
-                </TouchableOpacity>
+              <TouchableOpacity style={[stylesPerfilScreen.exitButton, { backgroundColor: "#27ae60" }]} onPress={handleAddVeiculo}>
+                <Text style={stylesPerfilScreen.exitText}>Salvar Veículo</Text>
+              </TouchableOpacity>
 
-                <TouchableOpacity
-                  style={[
-                    stylesPerfilScreen.exitButton,
-                    { backgroundColor: "#aaa", marginTop: 10 },
-                  ]}
-                  onPress={() => setModalVisible(false)}
-                >
-                  <Text style={stylesPerfilScreen.exitText}>Cancelar</Text>
-                </TouchableOpacity>
-              </ScrollView>
+              <TouchableOpacity style={[stylesPerfilScreen.exitButton, { backgroundColor: "#aaa", marginTop: 10 }]} onPress={() => setModalVisible(false)}>
+                <Text style={stylesPerfilScreen.exitText}>Cancelar</Text>
+              </TouchableOpacity>
+            </ScrollView>
           </View>
         </View>
       </Modal>
